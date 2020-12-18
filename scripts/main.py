@@ -343,8 +343,11 @@ def main():
         episode_reward += reward
 
     date_string = "_".join(str(datetime.utcnow()).split())
+
+    os.mkdir(f"charts/{date_string}")
+
     fig = env.renderer.render(env)
-    fig.savefig(f"charts/test_sine_curve_{date_string}.png")
+    fig.savefig(f"charts/{date_string}/test_sine_curve.png")
 
     for i in range(5):
         env = create_eval_env({
@@ -361,9 +364,8 @@ def main():
             obs, reward, done, info = env.step(action)
             episode_reward += reward
 
-        date_string = "_".join(str(datetime.utcnow()).split())
         fig = env.renderer.render(env)
-        fig.savefig(f"charts/trading_chart_{date_string}.png")
+        fig.savefig(f"charts/{date_string}/sample_{str(i).zfill(3)}.png")
 
 
 if __name__ == "__main__":

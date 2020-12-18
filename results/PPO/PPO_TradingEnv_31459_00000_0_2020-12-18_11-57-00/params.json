@@ -1,0 +1,17 @@
+{
+  "clip_rewards": true,
+  "entropy_coeff": 0.01,
+  "env": "TradingEnv",
+  "env_config": {
+    "window_size": 25
+  },
+  "framework": "torch",
+  "gamma": 0,
+  "ignore_worker_failures": true,
+  "lambda": 0.72,
+  "lr": 8e-06,
+  "num_gpus": 0,
+  "num_workers": 19,
+  "observation_filter": "MeanStdFilter",
+  "vf_loss_coeff": 0.5
+}
