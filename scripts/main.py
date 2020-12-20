@@ -131,7 +131,10 @@ class PositionChangeChart(Renderer):
         axs[0].set_xlabel("Step")
         axs[0].set_ylabel("Price (USD/TTC)")
 
-        env.action_scheme.portfolio.performance.net_worth.plot(ax=axs[1])
+        performance = env.action_scheme.portfolio.performance
+        performance = pd.DataFrame(performance).transpose()
+
+        performance.net_worth.plot(ax=axs[1])
         axs[1].set_title("Net Worth")
         axs[1].set_xlabel("Step")
         axs[1].set_ylabel("Amount (USD)")
