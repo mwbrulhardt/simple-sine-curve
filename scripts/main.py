@@ -146,7 +146,6 @@ def create_env(config):
     x = np.arange(0, 2*np.pi, 2*np.pi / 1001)
     y = 50*np.sin(3*x) + 100
 
-    x = np.arange(0, 2*np.pi, 2*np.pi / 1000)
     p = Stream.source(y, dtype="float").rename("USD-TTC")
 
     coinbase = Exchange("coinbase", service=execute_order)(
@@ -163,9 +162,9 @@ def create_env(config):
 
     feed = DataFeed([
         p,
-        p.rolling(window=10).mean().rename("fast"),
-        p.rolling(window=50).mean().rename("medium"),
-        p.rolling(window=100).mean().rename("slow"),
+        p.ewm(span=10).mean().rename("fast"),
+        p.ewm(span=50).mean().rename("medium"),
+        p.ewm(span=100).mean().rename("slow"),
         p.log().diff().fillna(0).rename("lr")
     ])
 
@@ -223,9 +222,8 @@ def fourier_gbm(price: float, mu: float, sigma: float, dt: float, n: int, order:
 
 
 def create_eval_env(config: dict):
-    y = config["y"]
 
-    x = np.arange(0, 2*np.pi, 2*np.pi / 1000)
+    y = config["y"]
     p = Stream.source(y, dtype="float").rename("USD-TTC")
 
     coinbase = Exchange("coinbase", service=execute_order)(
@@ -242,9 +240,9 @@ def create_eval_env(config: dict):
 
     feed = DataFeed([
         p,
-        p.rolling(window=10).mean().rename("fast"),
-        p.rolling(window=50).mean().rename("medium"),
-        p.rolling(window=100).mean().rename("slow"),
+        p.ewm(span=10).mean().rename("fast"),
+        p.ewm(span=50).mean().rename("medium"),
+        p.ewm(span=100).mean().rename("slow"),
         p.log().diff().fillna(0).rename("lr")
     ])
 
@@ -280,7 +278,7 @@ def main():
     analysis = tune.run(
         "PPO",
         stop={
-          "episode_reward_mean": 500
+          "episode_reward_mean": 580
         },
         config={
             "env": "TradingEnv",
